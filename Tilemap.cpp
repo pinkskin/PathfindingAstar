@@ -29,28 +29,6 @@ void Tilemap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Public FUNCTIONS
-
-//set the properties of a single tilenode except adj nodes
-//UNUSED
-void Tilemap::setTileNode(TileNode& tileNode)
-{
-	/*
-		set TileNode variables
-		- string type;
-		- int costToMoveInto;
-		- int heuristic;
-		- int local
-		- int global
-		- TileNode* parent;
-	*/
-	tileNode.type = "foo";
-	tileNode.costToMoveInto = 0;
-	tileNode.local = std::numeric_limits<float>::infinity();
-	tileNode.global = std::numeric_limits<float>::infinity();
-	tileNode.heuristic = 0;
-	tileNode.parent = nullptr;
-}
-
 //Create the tilemap entity
 bool Tilemap::load(std::string const& tileTexture, sf::Vector2u tileTextureSize,
 	std::string tileBlueprint, int tilesWidth, int tilesHeight)
@@ -97,25 +75,12 @@ bool Tilemap::load(std::string const& tileTexture, sf::Vector2u tileTextureSize,
 			quad[3].position = sf::Vector2f(j * tileTextureSize.x, (i + 1) * tileTextureSize.y);
 
 			//Calculate center position of each quad 
-			sf::Vector2f currQuadCenter = this->getQuadCenterPos(sf::Vector2f(quad[0].position.x, quad[0].position.y), 
-				sf::Vector2f(quad[3].position.x, quad[3].position.y));
-
-
-
-
-
-				
-			//TODO:Separate setting of node heuristic from here to enable updating. Or just figure out how to update heuristic
-			//clue: use getQuadCenterPos(sf::Vector2f const& mousePosViewCoords)
-
+			/*sf::Vector2f currQuadCenter = this->getQuadCenterPos(sf::Vector2f(quad[0].position.x, quad[0].position.y), 
+				sf::Vector2f(quad[3].position.x, quad[3].position.y));*/
 			//std::cout << currQuadCenter.x << "," << currQuadCenter.y << " ";					//CHECKING quadCenter output
-			this->setTileNodeHeuristic(currQuadCenter, sf::Vector2f(16,16), currTileNode); //2nd arg is currently static val. 
+
+			//this->setTileNodeHeuristic(currQuadCenter, sf::Vector2f(16,16), currTileNode); //2nd arg is currently static val. 
 			//std::cout << static_cast<int>(currTileNode.heuristic) << " ";						//CHECKING current TileNode's heuristic
-			
-			
-			
-			
-			
 			
 			//std::cout << currTileNode.adjacentNodes.size() << " ";								//CHECKING adj size
 
@@ -158,51 +123,61 @@ void Tilemap::changeTileNodeTexture(sf::Vector2f const& mousePosView, sf::Event 
 	quad[3].texCoords = sf::Vector2f(texturePos * 32, (0 + 1) * 32);
 }
 //TODO: FIX size. texture size here is still static
-void Tilemap::changeTileNodeTexture(sf::Vector2f const& tileNodeUpLfVertScreenPos)
+void Tilemap::changeTileNodeTexture(sf::Vector2f const& tileNodeUpLfVertScreenPos, int texPos)
 {
 	//adjust xPos and yPos to be just [0, 1, 2, 3, 4...]
 	int xPosAdjusted = tileNodeUpLfVertScreenPos.x / 32;
 	int yPosAdjusted = tileNodeUpLfVertScreenPos.y / 32;
 
-	std::cout << xPosAdjusted << "," << yPosAdjusted;
+	//std::cout << xPosAdjusted << "," << yPosAdjusted;																//CHECKING
 
 	sf::Vertex* quad = &verticesVertArr[(yPosAdjusted *
 		tilemapWidth + xPosAdjusted) * 4];
 
 	//currently the texture is constant at pos 4
-	int texturePos = 4;
-	quad[0].texCoords = sf::Vector2f(texturePos * 32, 0 * 32);
-	quad[1].texCoords = sf::Vector2f((texturePos + 1) * 32, 0 * 32);
-	quad[2].texCoords = sf::Vector2f((texturePos + 1) * 32, (0 + 1) * 32);
-	quad[3].texCoords = sf::Vector2f(texturePos * 32, (0 + 1) * 32);
+	quad[0].texCoords = sf::Vector2f(texPos * 32, 0 * 32);
+	quad[1].texCoords = sf::Vector2f((texPos + 1) * 32, 0 * 32);
+	quad[2].texCoords = sf::Vector2f((texPos + 1) * 32, (0 + 1) * 32);
+	quad[3].texCoords = sf::Vector2f(texPos * 32, (0 + 1) * 32);
 }
 
 //Return the node at the mouse position
 TileNode* Tilemap::getNodeAtMousePos(sf::Vector2f const& mousePosView)
 {
-	//xPos and yPos is limiting the coords to be multiples of texture size (points to upper left quad vertex)
-	int xPos = mousePosView.x - (static_cast<int>(mousePosView.x) % this->tilesetTexture->getSize().y);
-	int yPos = mousePosView.y - (static_cast<int>(mousePosView.y) % this->tilesetTexture->getSize().y);
-	//adjust xPos and yPos to be just [0, 1, 2, 3, 4...]
-	int xPosAdjusted = xPos / this->tilesetTexture->getSize().y;
-	int yPosAdjusted = yPos / this->tilesetTexture->getSize().y;
+	//xCoord and yCoord is limiting the coords to be multiples of texture size (points to upper left quad vertex)
+	int xCoord = mousePosView.x - (static_cast<int>(mousePosView.x) % this->tilesetTexture->getSize().y);
+	int yCoord = mousePosView.y - (static_cast<int>(mousePosView.y) % this->tilesetTexture->getSize().y);
+	//adjust xCoord and yCoord to be just [0, 1, 2, 3, 4...]
+	int xCoordAdjusted = xCoord / this->tilesetTexture->getSize().y;
+	int yCoordAdjusted = yCoord / this->tilesetTexture->getSize().y;
 
 	//std::cout << yPosAdjusted * this->tilemapWidth + xPosAdjusted << std::endl;							//CHECKING tileNodeVector index
 
-	return &this->tileNodeVector[yPosAdjusted * this->tilemapWidth + xPosAdjusted];
+	return &this->tileNodeVector[yCoordAdjusted * this->tilemapWidth + xCoordAdjusted];
 }
+//Get the element at mouseposview
+char Tilemap::getElemAtMousePos(sf::Vector2f const& mousePosView)
+{
+	//xCoord and yCoord is limiting the coords to be multiples of texture size (points to upper left quad vertex)
+	int xCoord = mousePosView.x - (static_cast<int>(mousePosView.x) % this->tilesetTexture->getSize().y);
+	int yCoord = mousePosView.y - (static_cast<int>(mousePosView.x) % this->tilesetTexture->getSize().y);
+	//adjust xCoord and yCoord to be just [0, 1, 2, 3, 4...]
+	int xCoordAdjusted = xCoord / this->tilesetTexture->getSize().y;
+	int yCoordAdjusted = yCoord / this->tilesetTexture->getSize().y;
 
+	return this->tileBlueprint[yCoordAdjusted * this->tilemapWidth + xCoordAdjusted];
+}
 
 //Calculate a quad's center position. Returns Vector2f
-sf::Vector2f Tilemap::getQuadCenterPos(sf::Vector2f const& quadPos0, sf::Vector2f const& quadPos3)
-{
-	sf::Vector2f quadCenterPos = quadPos0; //initialize to the current quad's upper left vector pos
-	int squareHalfLength = (quadPos3.y - quadPos0.y) / 2;
-	quadCenterPos.x += squareHalfLength;
-	quadCenterPos.y += squareHalfLength;
-
-	return quadCenterPos;
-}
+//sf::Vector2f Tilemap::getQuadCenterPos(sf::Vector2f const& quadPos0, sf::Vector2f const& quadPos3)
+//{
+//	sf::Vector2f quadCenterPos = quadPos0; //initialize to the current quad's upper left vector pos
+//	int squareHalfLength = (quadPos3.y - quadPos0.y) / 2;
+//	quadCenterPos.x += squareHalfLength;
+//	quadCenterPos.y += squareHalfLength;
+//
+//	return quadCenterPos;
+//}
 //for mouseclick on a tileNode - Calculate a quad's center position. Returns Vector2f
 sf::Vector2f Tilemap::getQuadCenterPos(sf::Vector2f const& mousePosViewCoords)
 {

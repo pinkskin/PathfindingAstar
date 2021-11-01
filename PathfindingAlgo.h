@@ -13,7 +13,8 @@ public:
 	TileNode* endNode;	//unused yet
 
 	//Public FUNCTIONS
-	std::vector<TileNode*>* getPath(TileNode& startNode, TileNode& endNode);
+	std::vector<TileNode*>* getPath(TileNode& startNode, TileNode& endNode, Tilemap& tilemap);
+	void resetNodesLocalGlobal(std::vector<TileNode>& tilemap);
 
 private:
 	//Private VARIABLES

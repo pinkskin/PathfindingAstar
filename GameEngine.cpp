@@ -56,13 +56,16 @@ void GameEngine::handleMousePresses(sf::Event evenjt)
 		//set endNode for algo
 		this->aStarAlgo.endNode = this->tilemap.getNodeAtMousePos(this->mousePosView);
 
-		std::cout << "startNode address in astaralgo: " << this->aStarAlgo.startNode << std::endl;			//CHECKING startNode address in astar algo
-		std::cout << "endNode address in astaralgo: " << this->aStarAlgo.endNode << std::endl;				//CHECKING endNode address in astar algo
+		//std::cout << "startNode address in astaralgo: " << this->aStarAlgo.startNode << std::endl;			//CHECKING startNode address in astar algo
+		//std::cout << "endNode address in astaralgo: " << this->aStarAlgo.endNode << std::endl;				//CHECKING endNode address in astar algo
 
 		//conclude the algo
 		std::vector<TileNode*>* optimalPath;
-		optimalPath = this->aStarAlgo.getPath(*this->aStarAlgo.startNode, *this->aStarAlgo.endNode);
-		//std::cout << optimalPath->size() << std::endl;
+		optimalPath = this->aStarAlgo.getPath(*this->aStarAlgo.startNode, *this->aStarAlgo.endNode, this->tilemap);
+		for (auto& x : *optimalPath)
+		{
+			this->tilemap.changeTileNodeTexture(x->screenPosUpperLeftVert, 5);
+		}
 	}
 }
 

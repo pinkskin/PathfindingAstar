@@ -1,2 +1,42 @@
 ﻿  PathfindingAlgo.cpp
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(37,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(37,40): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(38,55): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(38,46): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(39,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(39,46): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(40,55): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\PathfindingAstar\PathfindingAlgo.cpp(40,40): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   PathfindingAstar.vcxproj -> C:\Users\Julius\Documents\C++ Projects\PathfindingAstar\Debug\PathfindingAstar.exe
