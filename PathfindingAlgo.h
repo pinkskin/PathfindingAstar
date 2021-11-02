@@ -14,12 +14,15 @@ public:
 
 	//Public FUNCTIONS
 	std::vector<TileNode*>* getPath(TileNode& startNode, TileNode& endNode, Tilemap& tilemap);
-	void resetNodesLocalGlobal(std::vector<TileNode>& tilemap);
+	void resetProperties(Tilemap& tilemap);
 
 private:
 	//Private VARIABLES
 	std::vector<TileNode*> optimalPath;
 	std::list<TileNode*> operationVector;
+
+	//Private FUNCTIONS
+	
 
 };
 

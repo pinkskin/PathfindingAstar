@@ -40,13 +40,12 @@ void GameEngine::handleMousePresses(sf::Event evenjt)
 	//set start node
 	if (event.mouseButton.button == sf::Mouse::Left)
 	{
+		this->aStarAlgo.resetProperties(this->tilemap);
+
 		this->tilemap.changeTileNodeTexture(this->mousePosView, event);
 
 		//set startnode for algo
 		this->aStarAlgo.startNode = this->tilemap.getNodeAtMousePos(this->mousePosView);
-
-		//std::cout << tilemap.getQuadCenterPos(this->mousePosView).x << ","
-		//	tilemap.getQuadCenterPos(this->mousePosView).y << std::endl;
 	}
 	//set end node
 	if (event.mouseButton.button == sf::Mouse::Right)

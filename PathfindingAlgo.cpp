@@ -12,38 +12,6 @@ PathfindingAlgo::PathfindingAlgo()
 
 std::vector<TileNode*>* PathfindingAlgo::getPath(TileNode& startNode, TileNode& endNode, Tilemap& tilemap)
 {
-	
-	//this->resetNodesLocalGlobal(tilemap.tileNodeVector);
-
-	//Resetting properties
-	for (int i = 0; i < tilemap.tilemapHeight; ++i)
-	{
-		for (int j = 0; j < tilemap.tilemapWidth; ++j)
-		{
-			//Reset nodes' local and global variables
-			tilemap.tileNodeVector[i * tilemap.tilemapWidth + j].local = std::numeric_limits<float>::infinity();
-			tilemap.tileNodeVector[i * tilemap.tilemapWidth + j].global = std::numeric_limits<float>::infinity();
-
-			//Reset textures to original
-			sf::Vertex* quad = &tilemap.verticesVertArr[(i * tilemap.tilemapWidth + j) * 4];
-			char currentTileElem = tilemap.tileBlueprint[i * tilemap.tilemapWidth + j];
-			int intCurrentTileElem = 0;
-			if (currentTileElem == '0')
-				intCurrentTileElem = 0;
-			if (currentTileElem == '1')
-				intCurrentTileElem = 1;
-			int tu = intCurrentTileElem % (tilemap.tilesetTexture->getSize().x / 32);				//static value of 32
-			int tv = intCurrentTileElem / (tilemap.tilesetTexture->getSize().x / 32);				//static value of 32
-			quad[0].texCoords = sf::Vector2f(tu * 32, tv * 32);
-			quad[1].texCoords = sf::Vector2f((tu + 1) * 32, tv * 32);
-			quad[2].texCoords = sf::Vector2f((tu + 1) * 32, (tv + 1) * 32);
-			quad[3].texCoords = sf::Vector2f(tu * 32, (tv + 1) * 32);
-		}
-	}
-	//Reset containers
-	this->operationVector.clear();
-	this->optimalPath.clear();
-
 	//init startNode local to 0
 	startNode.local = 0.f;
 
@@ -126,12 +94,34 @@ std::vector<TileNode*>* PathfindingAlgo::getPath(TileNode& startNode, TileNode& 
 	return &this->optimalPath;
 }
 
-//Reset the local and global variables of the nodes
-void PathfindingAlgo::resetNodesLocalGlobal(std::vector<TileNode>& tilemap)
+void PathfindingAlgo::resetProperties(Tilemap& tilemap)
 {
-	for (auto& x : tilemap)
+	//Resetting properties
+	for (int i = 0; i < tilemap.tilemapHeight; ++i)
 	{
-		x.local = std::numeric_limits<float>::infinity();
-		x.global = std::numeric_limits<float>::infinity();
+		for (int j = 0; j < tilemap.tilemapWidth; ++j)
+		{
+			//Reset nodes' local and global variables
+			tilemap.tileNodeVector[i * tilemap.tilemapWidth + j].local = std::numeric_limits<float>::infinity();
+			tilemap.tileNodeVector[i * tilemap.tilemapWidth + j].global = std::numeric_limits<float>::infinity();
+
+			//Reset textures to original
+			sf::Vertex* quad = &tilemap.verticesVertArr[(i * tilemap.tilemapWidth + j) * 4];
+			char currentTileElem = tilemap.tileBlueprint[i * tilemap.tilemapWidth + j];
+			int intCurrentTileElem = 0;
+			if (currentTileElem == '0')
+				intCurrentTileElem = 0;
+			if (currentTileElem == '1')
+				intCurrentTileElem = 1;
+			int tu = intCurrentTileElem % (tilemap.tilesetTexture->getSize().x / 32);				//static value of 32
+			int tv = intCurrentTileElem / (tilemap.tilesetTexture->getSize().x / 32);				//static value of 32
+			quad[0].texCoords = sf::Vector2f(tu * 32, tv * 32);
+			quad[1].texCoords = sf::Vector2f((tu + 1) * 32, tv * 32);
+			quad[2].texCoords = sf::Vector2f((tu + 1) * 32, (tv + 1) * 32);
+			quad[3].texCoords = sf::Vector2f(tu * 32, (tv + 1) * 32);
+		}
 	}
+	//Reset containers
+	this->operationVector.clear();
+	this->optimalPath.clear();
 }
